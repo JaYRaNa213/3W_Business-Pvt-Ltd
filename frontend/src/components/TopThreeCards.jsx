@@ -54,7 +54,7 @@ const TopThreeCards = ({ users }) => {
               </Avatar>
               <Typography variant="h6">{user?.name || "Unknown"}</Typography>
               <Typography variant="subtitle1" fontWeight="bold">
-                {(user?.points ?? 0).toLocaleString()} pts {/* ✅ Safe points */}
+                {(user?.totalPoints ?? 0).toLocaleString()} pts {/* ✅ Safe points */}
               </Typography>
               <Typography variant="body2">#{index + 1} Rank</Typography>
             </CardContent>
