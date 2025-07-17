@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const claimHistorySchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "RatingUser",
   },
   points: Number,
   claimedAt: {
