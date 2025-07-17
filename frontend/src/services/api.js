@@ -1,19 +1,22 @@
-// === src/services/api.js ===
-const BASE_URL = 'http://localhost:5000/api';
+import axios from 'axios';
 
-export const fetchUsers = async () => {
-  const res = await fetch(`${BASE_URL}/users`);
-  return await res.json();
-};
+const API = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+});
 
-export const claimPoints = async (userId) => {
-  const res = await fetch(`${BASE_URL}/claim/${userId}`, {
-    method: 'POST',
-  });
-  return await res.json();
-};
+// Get all users
+export const getUsers = () => API.get('/users');
 
-export const fetchLeaderboard = async () => {
-  const res = await fetch(`${BASE_URL}/leaderboard`);
-  return await res.json();
-};
+// Get leaderboard
+export const getLeaderboard = () => API.get('/users/leaderboard');
+
+// Claim points for a user
+export const claimPoints = (userId) => API.post(`/users/${userId}/claim`);
+
+// Get claim history
+export const getHistory = () => API.get('/users/history');
+
+// Create new user
+export const createUser = (name) => API.post('/users', { name });
+
+export default API;

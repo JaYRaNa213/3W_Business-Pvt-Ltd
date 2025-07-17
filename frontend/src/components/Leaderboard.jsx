@@ -1,27 +1,15 @@
-// === src/components/Leaderboard.jsx ===
-import React, { useEffect, useState } from 'react';
-import { fetchLeaderboard } from '../services/api';
-import '../styles/Leaderboard.css';
+import TopThreeCards from './TopThreeCards';
+import RemainingList from './RemainingList';
 
-const Leaderboard = () => {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    fetchLeaderboard().then(data => setUsers(Array.isArray(data) ? data : []));
-  }, []);
+const Leaderboard = ({ data }) => {
+  const topThree = data.slice(0, 3);
+  const rest = data.slice(3);
 
   return (
-    <div className="leaderboard">
-      <h2>🏆 Leaderboard</h2>
-      <ul>
-        {users.map((user, i) => (
-          <li key={i}>
-            <span>#{user.rank} {user.name}</span>
-            <span>{user.totalPoints} pts</span>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <TopThreeCards users={topThree} />
+      <RemainingList users={rest} />
+    </>
   );
 };
 

@@ -1,19 +1,47 @@
-// === src/components/ClaimButton.jsx ===
-import React from 'react';
-import { claimPoints } from '../services/api';
-import '../styles/ClaimButton.css';
+// src/components/ClaimButton.jsx
+import React, { useState } from "react";
+import { Button, Snackbar, Alert } from "@mui/material";
+import { claimPoints } from "../services/api";
 
-const ClaimButton = ({ selectedUser, setLastClaim }) => {
+const ClaimButton = ({ userId, onClaim }) => {
+  const [result, setResult] = useState(null);
+  const [open, setOpen] = useState(false);
+
   const handleClaim = async () => {
-    if (!selectedUser) return alert('Please select a user first!');
-    const data = await claimPoints(selectedUser);
-    setLastClaim(`You claimed ${data.points} points!`);
+    if (!userId) return;
+    const res = await claimPoints(userId);
+    setResult(res);
+    setOpen(true);
+    onClaim(); // trigger parent refresh
   };
 
   return (
-    <button className="claim-btn" onClick={handleClaim}>
-      Claim Points
-    </button>
+    <>
+      <Button
+        variant="contained"
+        fullWidth
+        color="primary"
+        onClick={handleClaim}
+        disabled={!userId}
+        sx={{ height: "56px" }}
+      >
+        🎯 Claim Points
+      </Button>
+
+      <Snackbar
+        open={open}
+        autoHideDuration={4000}
+        onClose={() => setOpen(false)}
+      >
+        <Alert
+          onClose={() => setOpen(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {result?.message || "Points claimed!"}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

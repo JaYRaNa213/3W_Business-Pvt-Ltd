@@ -1,11 +1,11 @@
 📁 3W PVT LTD Task 1 :
 
+├── .env
 ├── .gitignore
 ├── eslint.config.js
 ├── index.html
 ├── package-lock.json
 ├── package.json
-├── postcss.config.js
 ├── public
 │   └── vite.svg
 ├── README.md
@@ -13,17 +13,20 @@
 │   ├── App.css
 │   ├── App.jsx
 │   ├── assets
+│   │   ├── crown.png
+│   │   ├── gold_trophy.jpg
 │   │   └── react.svg
 │   ├── components
 │   │   ├── ClaimButton.jsx
+│   │   ├── HistoryTable.jsx
 │   │   ├── Leaderboard.jsx
+│   │   ├── RemainingList.jsx
+│   │   ├── TopThreeCards.jsx
 │   │   └── UserSelector.jsx
 │   ├── index.css
 │   ├── main.jsx
-│   ├── pages
-│   │   └── Home.jsx
 │   └── services
 │       └── api.js
-├── tailwind.config.js
 ├── tree.js
+├── tree.txt
 └── vite.config.js
