@@ -1,27 +1,28 @@
-const getRankStyle = (rank) => {
-  if (rank === 1) return "text-yellow-500 font-bold";
-  if (rank === 2) return "text-gray-500 font-semibold";
-  if (rank === 3) return "text-orange-500 font-semibold";
-  return "text-gray-700";
-};
+// === src/components/Leaderboard.jsx ===
+import React, { useEffect, useState } from 'react';
+import { fetchLeaderboard } from '../services/api';
+import '../styles/Leaderboard.css';
 
-export default function Leaderboard({ users }) {
+const Leaderboard = () => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetchLeaderboard().then(data => setUsers(Array.isArray(data) ? data : []));
+  }, []);
+
   return (
-    <div className="p-6 bg-white shadow-md rounded-xl max-w-3xl mx-auto mt-8">
-      <h2 className="text-2xl font-bold text-center text-blue-800 mb-4">🏆 Leaderboard</h2>
-      <ul className="space-y-2">
-        {users?.map((user) => (
-          <li
-            key={user._id}
-            className="flex justify-between p-4 border rounded-lg hover:bg-gray-50"
-          >
-            <span className={`text-lg ${getRankStyle(idx + 1)}`}>
-              #{idx + 1} {user.name}
-            </span>
-            <span className="text-lg text-blue-600 font-bold">{user.totalPoints} pts</span>
+    <div className="leaderboard">
+      <h2>🏆 Leaderboard</h2>
+      <ul>
+        {users.map((user, i) => (
+          <li key={i}>
+            <span>#{user.rank} {user.name}</span>
+            <span>{user.totalPoints} pts</span>
           </li>
         ))}
       </ul>
     </div>
   );
-}
+};
+
+export default Leaderboard;

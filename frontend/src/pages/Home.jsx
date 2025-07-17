@@ -1,21 +1,22 @@
-// src/pages/Home.jsx
-import React from "react";
-import UserSelector from "../components/UserSelector";
-import ClaimButton from "../components/ClaimButton";
-import Leaderboard from "../components/Leaderboard";
+// === src/pages/Home.jsx ===
+import React, { useState } from 'react';
+import Leaderboard from '../components/Leaderboard';
+import ClaimButton from '../components/ClaimButton';
+import UserSelector from '../components/UserSelector';
+import '../styles/Home.css';
 
 export default function Home() {
+  const [selectedUser, setSelectedUser] = useState('');
+  const [lastClaim, setLastClaim] = useState(null);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
-      <h1 className="text-3xl font-extrabold text-center text-blue-800 mb-8">
-        🎯 Point Claim System
-      </h1>
-      <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-        <div>
-          <UserSelector />
-          <ClaimButton  />
-        </div>
-        <Leaderboard  />
+    <div className="home-container">
+      <h1 className="home-title">3W Point Claiming System</h1>
+      <div className="card">
+        <UserSelector selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
+        <ClaimButton selectedUser={selectedUser} setLastClaim={setLastClaim} />
+        {lastClaim && <p className="claim-message">{lastClaim}</p>}
+        <Leaderboard />
       </div>
     </div>
   );
