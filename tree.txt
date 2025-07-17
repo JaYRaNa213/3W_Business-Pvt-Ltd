@@ -1,0 +1,47 @@
+📁 3W PVT LTD Task 1 :
+
+├── .gitignore
+├── backend
+│   ├── .env
+│   ├── .gitignore
+│   ├── config
+│   │   └── db.js
+│   ├── controllers
+│   │   └── user.controller.js
+│   ├── models
+│   │   ├── claimHistory.model.js
+│   │   └── user.model.js
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── routes
+│   │   └── user.routes.js
+│   └── server.js
+├── frontend
+│   ├── .gitignore
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── public
+│   │   └── vite.svg
+│   ├── README.md
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── assets
+│   │   │   └── react.svg
+│   │   ├── components
+│   │   │   ├── ClaimButton.jsx
+│   │   │   ├── Leaderboard.jsx
+│   │   │   └── UserSelector.jsx
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   ├── pages
+│   │   │   └── Home.jsx
+│   │   └── services
+│   │       └── api.js
+│   ├── tailwind.config.js
+│   └── vite.config.js
+├── tree.js
+└── tree.txt
