@@ -1,0 +1,29 @@
+📁 3W PVT LTD Task 1 :
+
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── public
+│   └── vite.svg
+├── README.md
+├── src
+│   ├── App.css
+│   ├── App.jsx
+│   ├── assets
+│   │   └── react.svg
+│   ├── components
+│   │   ├── ClaimButton.jsx
+│   │   ├── Leaderboard.jsx
+│   │   └── UserSelector.jsx
+│   ├── index.css
+│   ├── main.jsx
+│   ├── pages
+│   │   └── Home.jsx
+│   └── services
+│       └── api.js
+├── tailwind.config.js
+├── tree.js
+└── vite.config.js
