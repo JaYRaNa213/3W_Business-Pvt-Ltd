@@ -2,6 +2,7 @@
 
 ├── .env
 ├── .gitignore
+├── App.js
 ├── config
 │   └── db.js
 ├── controllers
@@ -14,4 +15,5 @@
 ├── routes
 │   └── user.routes.js
 ├── server.js
-└── tree.js
+├── tree.js
+└── tree.txt

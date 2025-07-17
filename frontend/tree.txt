@@ -17,7 +17,10 @@
 │   │   ├── gold_trophy.jpg
 │   │   └── react.svg
 │   ├── components
+│   │   ├── AddUserForm.jsx
 │   │   ├── ClaimButton.jsx
+│   │   ├── ClaimHistory.jsx
+│   │   ├── ClaimPoints.jsx
 │   │   ├── HistoryTable.jsx
 │   │   ├── Leaderboard.jsx
 │   │   ├── RemainingList.jsx
