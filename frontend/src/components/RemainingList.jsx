@@ -25,7 +25,11 @@ const RemainingList = ({ users }) => {
               </ListItemAvatar>
               <ListItemText
                 primary={user.name || "Mystery Billionaire"}
-                secondary={`Rank #${index + 4} — ${(user?.totalPoints || 0).toLocaleString()} pts`}
+                secondary={`Rank #${index + 4} — ${
+                  typeof user?.totalPoints === "number"
+                    ? user.totalPoints.toLocaleString()
+                    : "0"
+                } pts`}
               />
             </ListItem>
           ))}

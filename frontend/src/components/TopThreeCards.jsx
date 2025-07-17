@@ -1,4 +1,4 @@
-// TopThreeCards.jsx
+// src/components/TopThreeCards.jsx
 import React from "react";
 import { Card, CardContent, Typography, Avatar, Box } from "@mui/material";
 import { motion } from "framer-motion";
@@ -11,7 +11,7 @@ const TopThreeCards = ({ users }) => {
     <Box display="flex" justifyContent="center" gap={3} flexWrap="wrap" mt={2}>
       {users.map((user, index) => (
         <motion.div
-          key={user._id || index} // ✅ fallback key
+          key={user._id || index}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: index * 0.2 }}
@@ -50,11 +50,11 @@ const TopThreeCards = ({ users }) => {
                   color: "#000",
                 }}
               >
-                {user?.name?.[0] || "?"} {/* ✅ Fallback for name */}
+                {user?.name?.[0] || "?"}
               </Avatar>
               <Typography variant="h6">{user?.name || "Unknown"}</Typography>
               <Typography variant="subtitle1" fontWeight="bold">
-                {(user?.totalPoints ?? 0).toLocaleString()} pts {/* ✅ Safe points */}
+                {(user?.totalPoints ?? 0).toLocaleString()} pts
               </Typography>
               <Typography variant="body2">#{index + 1} Rank</Typography>
             </CardContent>
