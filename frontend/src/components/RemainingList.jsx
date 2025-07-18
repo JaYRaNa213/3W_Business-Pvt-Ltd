@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Paper,
@@ -16,14 +16,15 @@ import MaskIcon from "@mui/icons-material/Masks";
 import trophyIcon from "../assets/gold_trophy.jpg";
 
 const RemainingList = ({ users = [], currentUserId = "", onClaim }) => {
-  const displayUsers = users.slice(0, 7); // Show only top 7 after top 3
+  const [showAll, setShowAll] = useState(false);
+  const displayUsers = showAll ? users : users.slice(0, 7);
 
   return (
     <Box mt={2}>
       <Paper elevation={3} sx={{ borderRadius: 2 }}>
         <Box px={2} py={1} borderBottom="1px solid #ddd">
           <Typography variant="h6" fontWeight="bold">
-            🏅 Rankings 4 to 10
+            🏅 Rankings 4  to 10
           </Typography>
         </Box>
 
@@ -119,6 +120,18 @@ const RemainingList = ({ users = [], currentUserId = "", onClaim }) => {
             );
           })}
         </List>
+
+        {users.length > 7 && (
+          <Box textAlign="center" py={1.5}>
+            <Button
+              variant="text"
+              onClick={() => setShowAll(!showAll)}
+              sx={{ textTransform: "none", fontWeight: "medium" }}
+            >
+              {showAll ? "Show Less" : "View More Users"}
+            </Button>
+          </Box>
+        )}
       </Paper>
     </Box>
   );

@@ -8,9 +8,7 @@ import { useNavigate } from "react-router-dom";
 const Leaderboard = ({
   data,
   currentUserId,
-  fetchUsers,
-  fetchLeaderboard,
-  fetchHistory,
+  
   onClaim,
 }) => {
   const navigate = useNavigate();

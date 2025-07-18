@@ -12,6 +12,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { getAllUsers, createUser } from "../services/api";
 
@@ -19,27 +21,26 @@ const UserSelector = ({ selectedUserId, setSelectedUserId }) => {
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
   const [newUserName, setNewUserName] = useState("");
-  const [newUserId, setNewUserId] = useState(null); // 🆕 track new user ID
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
   const fetchUsers = async () => {
-  try {
-    const res = await getAllUsers();
-    let sorted = res.data.sort((a, b) => b.totalPoints - a.totalPoints);
+    try {
+      const res = await getAllUsers();
+      let sorted = res.data.sort((a, b) => b.totalPoints - a.totalPoints);
 
-    // Move the selected user (new or existing) to the top
-    if (selectedUserId) {
-      const selectedUser = sorted.find((u) => u._id === selectedUserId);
-      sorted = [
-        selectedUser,
-        ...sorted.filter((u) => u._id !== selectedUserId),
-      ];
+      if (selectedUserId) {
+        const selectedUser = sorted.find((u) => u._id === selectedUserId);
+        sorted = [
+          selectedUser,
+          ...sorted.filter((u) => u._id !== selectedUserId),
+        ];
+      }
+
+      setUsers(sorted);
+    } catch (err) {
+      console.error("Failed to fetch users", err);
     }
-
-    setUsers(sorted);
-  } catch (err) {
-    console.error("Failed to fetch users", err);
-  }
-};
+  };
 
   useEffect(() => {
     fetchUsers();
@@ -48,14 +49,16 @@ const UserSelector = ({ selectedUserId, setSelectedUserId }) => {
   const handleAddUser = async () => {
     if (!newUserName.trim()) return;
     try {
-      const res = await createUser(newUserName); // returns new user
+      const res = await createUser(newUserName);
       const userId = res.data._id;
-      setNewUserId(userId); // 🆕 store new user ID to highlight
+      setSelectedUserId(userId);
       setNewUserName("");
       setOpen(false);
-      fetchUsers(); // Refresh and auto-select new user
+      setSnackbar({ open: true, message: "✅ User added successfully!", severity: "success" });
+      fetchUsers();
     } catch (err) {
       console.error("Error adding user", err);
+      setSnackbar({ open: true, message: "❌ Failed to add user", severity: "error" });
     }
   };
 
@@ -113,6 +116,20 @@ const UserSelector = ({ selectedUserId, setSelectedUserId }) => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          severity={snackbar.severity}
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
