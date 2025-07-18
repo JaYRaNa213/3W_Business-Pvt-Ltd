@@ -1,101 +1,118 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Typography,
-  FormControl,
   InputLabel,
+  FormControl,
   Select,
   MenuItem,
+  Typography,
   Button,
-  Snackbar,
-  Alert,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
-import { getUsers, claimPoints } from "../services/api";
+import { getAllUsers, createUser } from "../services/api";
 
-const UserSelector = ({ onUserChange, refreshLeaderboard }) => {
+const UserSelector = ({ selectedUserId, setSelectedUserId }) => {
   const [users, setUsers] = useState([]);
-  const [selectedUserId, setSelectedUserId] = useState("");
-  const [snackbar, setSnackbar] = useState({ open: false, points: 0 });
+  const [open, setOpen] = useState(false);
+  const [newUserName, setNewUserName] = useState("");
+  const [newUserId, setNewUserId] = useState(null); // 🆕 track new user ID
 
-  // Load users on mount
+  const fetchUsers = async () => {
+  try {
+    const res = await getAllUsers();
+    let sorted = res.data.sort((a, b) => b.totalPoints - a.totalPoints);
+
+    // Move the selected user (new or existing) to the top
+    if (selectedUserId) {
+      const selectedUser = sorted.find((u) => u._id === selectedUserId);
+      sorted = [
+        selectedUser,
+        ...sorted.filter((u) => u._id !== selectedUserId),
+      ];
+    }
+
+    setUsers(sorted);
+  } catch (err) {
+    console.error("Failed to fetch users", err);
+  }
+};
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await getUsers();
-        setUsers(res.data);
-        if (res.data.length > 0) {
-          setSelectedUserId(res.data[0]._id);
-          onUserChange(res.data[0]._id);
-        }
-      } catch (err) {
-        console.error("Error fetching users:", err);
-      }
-    };
     fetchUsers();
   }, []);
 
-  // Handle user dropdown change
-  const handleUserChange = (e) => {
-    setSelectedUserId(e.target.value);
-    onUserChange(e.target.value);
-  };
-
-  // Handle claim button
-  const handleClaim = async () => {
+  const handleAddUser = async () => {
+    if (!newUserName.trim()) return;
     try {
-      const res = await claimPoints(selectedUserId);
-      const points = res?.data?.points || 0;
-      setSnackbar({ open: true, points });
-      refreshLeaderboard(); // refresh rankings
+      const res = await createUser(newUserName); // returns new user
+      const userId = res.data._id;
+      setNewUserId(userId); // 🆕 store new user ID to highlight
+      setNewUserName("");
+      setOpen(false);
+      fetchUsers(); // Refresh and auto-select new user
     } catch (err) {
-      console.error("Error claiming points:", err);
+      console.error("Error adding user", err);
     }
   };
 
   return (
-    <Box
-      sx={{
-        mb: 4,
-        display: "flex",
-        alignItems: "center",
-        gap: 2,
-        flexWrap: "wrap",
-      }}
-    >
-      <FormControl size="small" sx={{ minWidth: 200 }}>
-        <InputLabel>Select User</InputLabel>
-        <Select value={selectedUserId} onChange={handleUserChange} label="Select User">
+    <Box mb={3}>
+      <Typography variant="h6" gutterBottom>
+        Select User
+      </Typography>
+
+      <FormControl fullWidth>
+        <InputLabel id="user-select-label">User</InputLabel>
+        <Select
+          labelId="user-select-label"
+          value={selectedUserId || ""}
+          label="User"
+          onChange={(e) => setSelectedUserId(e.target.value)}
+        >
           {users.map((user) => (
-            <MenuItem key={user._id} value={user._id}>
+            <MenuItem
+              key={user._id}
+              value={user._id}
+              style={{
+                fontWeight: selectedUserId === user._id ? "bold" : "normal",
+                backgroundColor: selectedUserId === user._id ? "#e3f2fd" : "inherit",
+              }}
+            >
               {user.name}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
 
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleClaim}
-        disabled={!selectedUserId}
-      >
-        Claim Points
-      </Button>
+      <Box mt={2} display="flex" justifyContent="flex-end">
+        <Button variant="outlined" onClick={() => setOpen(true)}>
+          ➕ Add User
+        </Button>
+      </Box>
 
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={3000}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
-          onClose={() => setSnackbar({ ...snackbar, open: false })}
-          severity="success"
-          variant="filled"
-        >
-          🎉 You earned {snackbar.points} points!
-        </Alert>
-      </Snackbar>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Add New User</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="User Name"
+            fullWidth
+            value={newUserName}
+            onChange={(e) => setNewUserName(e.target.value)}
+            autoFocus
+            margin="dense"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={handleAddUser} variant="contained">
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

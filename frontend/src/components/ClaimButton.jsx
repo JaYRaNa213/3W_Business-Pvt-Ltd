@@ -4,15 +4,28 @@ import { Button, Snackbar, Alert } from "@mui/material";
 import { claimPoints } from "../services/api";
 
 const ClaimButton = ({ userId, onClaim }) => {
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState({ message: "", severity: "success" });
   const [open, setOpen] = useState(false);
 
   const handleClaim = async () => {
     if (!userId) return;
-    const res = await claimPoints(userId);
-    setResult(res);
-    setOpen(true);
-    onClaim(); // trigger parent refresh
+
+    try {
+      const res = await claimPoints(userId);
+      setResult({
+        message: `🎉 You claimed ${res.data?.points || "?"} points!`,
+        severity: "success",
+      });
+      if (onClaim) onClaim(userId); // Refresh leaderboard and history
+    } catch (error) {
+      console.error("Error claiming points:", error);
+      setResult({
+        message: error?.response?.data?.message || "Failed to claim points",
+        severity: "error",
+      });
+    } finally {
+      setOpen(true);
+    }
   };
 
   return (
@@ -35,10 +48,10 @@ const ClaimButton = ({ userId, onClaim }) => {
       >
         <Alert
           onClose={() => setOpen(false)}
-          severity="success"
+          severity={result.severity}
           sx={{ width: "100%" }}
         >
-          {result?.message || "Points claimed!"}
+          {result.message}
         </Alert>
       </Snackbar>
     </>
