@@ -17,17 +17,25 @@ import {
 } from "@mui/material";
 import { getAllUsers, createUser } from "../services/api";
 
-const UserSelector = ({ selectedUserId, setSelectedUserId }) => {
+const UserSelector = ({
+  selectedUserId,
+  setSelectedUserId,
+  onClaimClick,
+  onViewHistoryClick,
+}) => {
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
   const [newUserName, setNewUserName] = useState("");
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const fetchUsers = async () => {
     try {
       const res = await getAllUsers();
       let sorted = res.data.sort((a, b) => b.totalPoints - a.totalPoints);
-
       if (selectedUserId) {
         const selectedUser = sorted.find((u) => u._id === selectedUserId);
         sorted = [
@@ -35,7 +43,6 @@ const UserSelector = ({ selectedUserId, setSelectedUserId }) => {
           ...sorted.filter((u) => u._id !== selectedUserId),
         ];
       }
-
       setUsers(sorted);
     } catch (err) {
       console.error("Failed to fetch users", err);
@@ -54,18 +61,40 @@ const UserSelector = ({ selectedUserId, setSelectedUserId }) => {
       setSelectedUserId(userId);
       setNewUserName("");
       setOpen(false);
-      setSnackbar({ open: true, message: "✅ User added successfully!", severity: "success" });
+      setSnackbar({
+        open: true,
+        message: "✅ User added successfully!",
+        severity: "success",
+      });
       fetchUsers();
     } catch (err) {
       console.error("Error adding user", err);
-      setSnackbar({ open: true, message: "❌ Failed to add user", severity: "error" });
+      setSnackbar({
+        open: true,
+        message: "❌ Failed to add user",
+        severity: "error",
+      });
     }
   };
 
+  const handleActionClick = (actionType) => {
+    if (!selectedUserId) {
+      setSnackbar({
+        open: true,
+        message: `❗ Please select a user to ${actionType}`,
+        severity: "warning",
+      });
+      return;
+    }
+
+    if (actionType === "claim points") onClaimClick();
+    if (actionType === "view history") onViewHistoryClick();
+  };
+
   return (
-    <Box mb={3}>
+    <Box mb={4}>
       <Typography variant="h6" gutterBottom>
-        Select User
+        Select User to Claim Points
       </Typography>
 
       <FormControl fullWidth>
@@ -82,7 +111,8 @@ const UserSelector = ({ selectedUserId, setSelectedUserId }) => {
               value={user._id}
               style={{
                 fontWeight: selectedUserId === user._id ? "bold" : "normal",
-                backgroundColor: selectedUserId === user._id ? "#e3f2fd" : "inherit",
+                backgroundColor:
+                  selectedUserId === user._id ? "#e3f2fd" : "inherit",
               }}
             >
               {user.name}
@@ -91,10 +121,28 @@ const UserSelector = ({ selectedUserId, setSelectedUserId }) => {
         </Select>
       </FormControl>
 
-      <Box mt={2} display="flex" justifyContent="flex-end">
+      <Box mt={2} display="flex" justifyContent="space-between" flexWrap="wrap" gap={2}>
         <Button variant="outlined" onClick={() => setOpen(true)}>
           ➕ Add User
         </Button>
+
+        <Box display="flex" gap={2}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => handleActionClick("view history")}
+          >
+            📜 View History
+          </Button>
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleActionClick("claim points")}
+          >
+            🎯 Claim Points
+          </Button>
+        </Box>
       </Box>
 
       <Dialog open={open} onClose={() => setOpen(false)}>
