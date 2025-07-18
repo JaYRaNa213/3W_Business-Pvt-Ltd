@@ -49,7 +49,7 @@ const TopThreeCards = ({ users, currentUserId }) => {
               transform: `translateY(-${positions[index]?.offsetY ?? 0}px)`,
               textAlign: "center",
               transition: "transform 0.3s ease-in-out",
-              minWidth: { xs: 110, sm: 140 },
+              minWidth: { xs: 105, sm: 140 },
               flexShrink: 0,
               "&:hover": {
                 transform: `translateY(-${positions[index].offsetY + 10}px) scale(1.03)`,
@@ -58,7 +58,7 @@ const TopThreeCards = ({ users, currentUserId }) => {
           >
             <Card
               sx={{
-                borderRadius: 4,
+                borderRadius: 5,
                 boxShadow: isTop1 ? 8 : 4,
                 background: isTop1
                   ? "linear-gradient(135deg, #fff176, #ffe082)"
@@ -73,7 +73,7 @@ const TopThreeCards = ({ users, currentUserId }) => {
                 transition: "box-shadow 0.3s, transform 0.3s",
               }}
             >
-              <CardContent sx={{ px: 1, pb: "12px !important" }}>
+              <CardContent sx={{ px:0, pb: "1px !important" }}>
                 <EmojiEventsIcon
                   sx={{
                     position: "absolute",
