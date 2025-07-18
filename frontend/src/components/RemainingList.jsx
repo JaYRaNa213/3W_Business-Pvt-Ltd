@@ -15,11 +15,11 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import MaskIcon from "@mui/icons-material/Masks";
 import trophyIcon from "../assets/gold_trophy.jpg";
 
-const RemainingList = ({ users = [], currentUserName = "", onClaim }) => {
+const RemainingList = ({ users = [], currentUserId = "", onClaim }) => {
   const displayUsers = users.slice(0, 7); // Show only top 7 after top 3
 
   return (
-    <Box mt={5}>
+    <Box mt={2}>
       <Paper elevation={3} sx={{ borderRadius: 2 }}>
         <Box px={2} py={1} borderBottom="1px solid #ddd">
           <Typography variant="h6" fontWeight="bold">
@@ -29,8 +29,7 @@ const RemainingList = ({ users = [], currentUserName = "", onClaim }) => {
 
         <List dense>
           {displayUsers.map((user, index) => {
-            const isCurrent =
-              user.name?.toLowerCase() === currentUserName.toLowerCase();
+            const isCurrent = user._id === currentUserId;
 
             return (
               <React.Fragment key={user._id || index}>

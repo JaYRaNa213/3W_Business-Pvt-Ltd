@@ -9,39 +9,38 @@ const Leaderboard = ({ data, currentUserId, onClaim }) => {
   const navigate = useNavigate();
 
   const sortedData = [...data].sort((a, b) => b.totalPoints - a.totalPoints);
-
-  
-  // const topThree = sortedData.slice(0, 3);
-
-
-  const topThree = [sortedData[1], sortedData[0], sortedData[2]]; 
-
- 
+  const topThree = [sortedData[1], sortedData[0], sortedData[2]];
   const remaining = sortedData.slice(3);
 
   return (
-    <Container maxWidth="md" sx={{ px: { xs: 2, sm: 4 }, mt: 2 }}>
-      
+    <Container maxWidth="sm" sx={{ px: { xs: 2, sm: 4 }, py: { xs: 2, sm: 4 } }}>
       {currentUserId && (
-        <Box
-          display="flex"
-          justifyContent="center"
-          sx={{ my: { xs: 2, sm: 8 } }}
-        >
+        <Box display="flex" justifyContent="center" mb={3}>
           <ClaimButton userId={currentUserId} onClaim={onClaim} />
         </Box>
       )}
 
-      <TopThreeCards users={topThree} currentUserId={currentUserId} />
+      {/* Top 3 Cards - Stack vertically on mobile */}
+      <Box
+        display="flex"
+        flexDirection={{ xs: "column", sm: "row" }}
+        alignItems="center"
+        justifyContent="center"
+        gap={2}
+        mb={4}
+      >
+        <TopThreeCards users={topThree} currentUserId={currentUserId} />
+      </Box>
 
-      <RemainingList users={remaining} currentUserId={currentUserId} />
+      {/* Remaining List */}
+      <Box display="flex" justifyContent="center">
+        <Box width="100%" maxWidth={500}>
+          <RemainingList users={remaining} currentUserId={currentUserId} />
+        </Box>
+      </Box>
 
       {currentUserId && (
-        <Box
-          display="flex"
-          justifyContent="center"
-          sx={{ mt: { xs: 4, sm: 6 }, mb: { xs: 4, sm: 8 } }}
-        >
+        <Box display="flex" justifyContent="center" mt={4}>
           <Button
             size="medium"
             variant="outlined"

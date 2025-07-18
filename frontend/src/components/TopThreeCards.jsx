@@ -1,8 +1,8 @@
 import React from "react";
-import { Card, CardContent, Typography, Box } from "@mui/material";
+import { Card, CardContent, Typography, Box, Stack } from "@mui/material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import StarIcon from "@mui/icons-material/Star";
-import "./TopThreeCards.css"; // for confetti animation
+import "./TopThreeCards.css"; // For confetti animation
 
 const TopThreeCards = ({ users, currentUserId }) => {
   const positions = [
@@ -12,7 +12,19 @@ const TopThreeCards = ({ users, currentUserId }) => {
   ];
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="flex-end" gap={3} mb={4}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: { xs: "row", sm: "row" },
+        justifyContent: "center",
+        alignItems: "flex-end",
+        gap: { xs: 1, sm: 3 },
+        mt: { xs: 2, sm: 6 },
+        mb: { xs: 2, sm: 4 },
+        px: { xs: 0.5, sm: 2 },
+        overflowX: "auto",
+      }}
+    >
       {users.map((user, index) => {
         if (!user) return null;
 
@@ -24,10 +36,11 @@ const TopThreeCards = ({ users, currentUserId }) => {
             key={user._id || index}
             className={isTop1 ? "confetti-wrapper" : ""}
             sx={{
-                            transform: `translateY(-${positions[index]?.offsetY ?? 0}px)`,
-
+              transform: `translateY(-${positions[index]?.offsetY ?? 0}px)`,
               textAlign: "center",
               transition: "transform 0.3s ease-in-out",
+              minWidth: { xs: 100, sm: 140 },
+              flexShrink: 0,
               "&:hover": {
                 transform: `translateY(-${positions[index].offsetY + 10}px)`,
               },
@@ -35,9 +48,7 @@ const TopThreeCards = ({ users, currentUserId }) => {
           >
             <Card
               sx={{
-                minWidth: 180,
-                borderRadius: 4,
-                transition: "0.3s",
+                borderRadius: 3,
                 boxShadow: isTop1 ? 8 : 4,
                 background: isTop1
                   ? "linear-gradient(135deg, #ffeb3b, #fff176)"
@@ -46,22 +57,23 @@ const TopThreeCards = ({ users, currentUserId }) => {
                   : "#f9f9f9",
                 border: isSelected ? "2px solid #1976d2" : "none",
                 position: "relative",
+                px: 1,
+                py: 2,
                 "&:hover": {
                   boxShadow: 10,
                   transform: "scale(1.05)",
                 },
               }}
             >
-              <CardContent>
+              <CardContent sx={{ px: 1 }}>
                 <EmojiEventsIcon
                   sx={{
                     position: "absolute",
-                    top: -20,
+                    top: -18,
                     left: "50%",
                     transform: "translateX(-50%)",
-                    fontSize: 36,
+                    fontSize: 30,
                     color: positions[index]?.color ?? "#ccc",
-
                   }}
                 />
                 {isTop1 && (
@@ -72,15 +84,15 @@ const TopThreeCards = ({ users, currentUserId }) => {
                       top: -10,
                       right: -10,
                       color: "#ff4081",
-                      fontSize: 30,
+                      fontSize: 26,
                     }}
                   />
                 )}
-                <Typography variant="h6" mt={isTop1 ? 3 : 1}>
+                <Typography variant="subtitle1" mt={isTop1 ? 2.5 : 1} noWrap>
                   {positions[index].rank} {user.name}
                 </Typography>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  {user.totalPoints} Pts
+                <Typography variant="body2" fontWeight="bold">
+                  {user.totalPoints} pts
                 </Typography>
               </CardContent>
             </Card>
