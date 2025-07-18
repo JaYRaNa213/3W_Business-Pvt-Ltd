@@ -9,6 +9,8 @@ import {
 
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 
 import UserSelector from "../components/UserSelector";
 import Leaderboard from "../components/Leaderboard";
@@ -24,7 +26,7 @@ const Home = () => {
   };
 
   const fetchUsers = async () => {
-    await getAllUsers(); // fetch without storing since UserSelector will handle dropdown
+    await getAllUsers();
   };
 
   const fetchHistory = async () => {
@@ -33,39 +35,57 @@ const Home = () => {
   };
 
   const handleClaim = async () => {
-  const res = await claimPoints(selectedUserId);
-  await fetchUsers();
-  await fetchLeaderboard();
-  await fetchHistory();
-  return res?.data?.points || 0; 
-};
-
+    const res = await claimPoints(selectedUserId);
+    await fetchUsers();
+    await fetchLeaderboard();
+    await fetchHistory();
+    return res?.data?.points || 0;
+  };
 
   useEffect(() => {
     fetchLeaderboard();
   }, []);
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4 }}>
-      <Typography variant="h4" align="center" gutterBottom>
-        🏆 3 W Business Pvt. Ltd. (Task 1)
-      </Typography>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #6f7111ff, #f0fbbbff)",
+        py: 4,
+      }}
+    >
+      <Container maxWidth="md">
+        <Paper elevation={4} sx={{ p: 4, borderRadius: 4 }}>
+          <Typography
+            variant="h4"
+            align="center"
+            gutterBottom
+            sx={{
+              fontWeight: "bold",
+              color: "#1565c0",
+              textShadow: "1px 1px 2px #90caf9",
+            }}
+          >
+            🏆 3 W Business Pvt. Ltd. (Task 1)
+          </Typography>
 
-      <UserSelector
-        selectedUserId={selectedUserId}
-        setSelectedUserId={setSelectedUserId}
-        fetchUsers={fetchUsers}
-      />
+          <UserSelector
+            selectedUserId={selectedUserId}
+            setSelectedUserId={setSelectedUserId}
+            fetchUsers={fetchUsers}
+          />
 
-      <Leaderboard
-        data={leaderboard}
-        currentUserId={selectedUserId}
-        fetchUsers={fetchUsers}
-        fetchLeaderboard={fetchLeaderboard}
-        fetchHistory={fetchHistory}
-        onClaim={handleClaim}
-      />
-    </Container>
+          <Leaderboard
+            data={leaderboard}
+            currentUserId={selectedUserId}
+            fetchUsers={fetchUsers}
+            fetchLeaderboard={fetchLeaderboard}
+            fetchHistory={fetchHistory}
+            onClaim={handleClaim}
+          />
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 
