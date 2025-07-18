@@ -24,10 +24,14 @@
 │   │   ├── HistoryTable.jsx
 │   │   ├── Leaderboard.jsx
 │   │   ├── RemainingList.jsx
+│   │   ├── TopThreeCards.css
 │   │   ├── TopThreeCards.jsx
 │   │   └── UserSelector.jsx
 │   ├── index.css
 │   ├── main.jsx
+│   ├── pages
+│   │   ├── ClaimHistoryPage.jsx
+│   │   └── Home.jsx
 │   └── services
 │       └── api.js
 ├── tree.js
