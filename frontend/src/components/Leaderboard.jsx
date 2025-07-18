@@ -5,11 +5,18 @@ import ClaimButton from "./ClaimButton";
 import { Box, Button, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const Leaderboard = ({ data, currentUserId, onClaim }) => {
+const Leaderboard = ({
+  data,
+  currentUserId,
+  fetchUsers,
+  fetchLeaderboard,
+  fetchHistory,
+  onClaim,
+}) => {
   const navigate = useNavigate();
 
   const sortedData = [...data].sort((a, b) => b.totalPoints - a.totalPoints);
-  const topThree = [sortedData[1], sortedData[0], sortedData[2]];
+  const topThree = [sortedData[1] || {}, sortedData[0] || {}, sortedData[2] || {}];
   const remaining = sortedData.slice(3);
 
   return (
@@ -20,7 +27,6 @@ const Leaderboard = ({ data, currentUserId, onClaim }) => {
         </Box>
       )}
 
-      {/* Top 3 Cards - Stack vertically on mobile */}
       <Box
         display="flex"
         flexDirection={{ xs: "column", sm: "row" }}
@@ -32,7 +38,6 @@ const Leaderboard = ({ data, currentUserId, onClaim }) => {
         <TopThreeCards users={topThree} currentUserId={currentUserId} />
       </Box>
 
-      {/* Remaining List */}
       <Box display="flex" justifyContent="center">
         <Box width="100%" maxWidth={500}>
           <RemainingList users={remaining} currentUserId={currentUserId} />
@@ -40,14 +45,8 @@ const Leaderboard = ({ data, currentUserId, onClaim }) => {
       </Box>
 
       {currentUserId && (
-        <Box display="flex" justifyContent="center" mt={4}>
-          <Button
-            size="medium"
-            variant="outlined"
-            onClick={() => navigate(`/history/${currentUserId}`)}
-          >
-            View Claim History
-          </Button>
+        <Box display="flex" justifyContent="flex-end" mt={4}>
+          
         </Box>
       )}
     </Container>

@@ -1,57 +1,84 @@
-// src/components/ClaimButton.jsx
 import React, { useState } from "react";
-import { Button, Snackbar, Alert } from "@mui/material";
-import { claimPoints } from "../services/api";
+import {
+  Button,
+  CircularProgress,
+  Snackbar,
+  Alert,
+  Stack,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const ClaimButton = ({ userId, onClaim }) => {
-  const [result, setResult] = useState({ message: "", severity: "success" });
-  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  const navigate = useNavigate();
 
   const handleClaim = async () => {
-    if (!userId) return;
-
     try {
-      const res = await claimPoints(userId);
-      setResult({
-        message: `🎉 You claimed ${res.data?.points || "?"} points!`,
+      setLoading(true);
+      const claimedPoints = await onClaim();
+      setSnackbar({
+        open: true,
+        message: `✅ Claimed ${claimedPoints} points successfully!`,
         severity: "success",
       });
-      if (onClaim) onClaim(userId); // Refresh leaderboard and history
-    } catch (error) {
-      console.error("Error claiming points:", error);
-      setResult({
-        message: error?.response?.data?.message || "Failed to claim points",
+    } catch (err) {
+      setSnackbar({
+        open: true,
+        message: "❌ Failed to claim points!",
         severity: "error",
       });
     } finally {
-      setOpen(true);
+      setLoading(false);
     }
+  };
+
+  const handleViewHistory = () => {
+    navigate(`/history/${userId}`);
   };
 
   return (
     <>
-      <Button
-        variant="contained"
-        fullWidth
-        color="primary"
-        onClick={handleClaim}
-        disabled={!userId}
-        sx={{ height: "56px" }}
-      >
-        🎯 Claim Points
-      </Button>
+      <Stack direction="row" spacing={2}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          disabled={!userId}
+          onClick={handleViewHistory}
+        >
+          📜 View History
+        </Button>
+
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={loading || !userId}
+          onClick={handleClaim}
+        >
+          {loading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "🎯 Claim Points"
+          )}
+        </Button>
+      </Stack>
 
       <Snackbar
-        open={open}
-        autoHideDuration={4000}
-        onClose={() => setOpen(false)}
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
-          onClose={() => setOpen(false)}
-          severity={result.severity}
-          sx={{ width: "100%" }}
+          severity={snackbar.severity}
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
         >
-          {result.message}
+          {snackbar.message}
         </Alert>
       </Snackbar>
     </>
