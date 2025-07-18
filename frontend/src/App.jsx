@@ -15,7 +15,7 @@ function HomePage({ leaderboard, selectedUserId, setSelectedUserId, handleClaim 
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <Typography variant="h4" align="center" gutterBottom>
                 🏆
-               3 W Pvt. Ltd. Task 1 
+               3 W Bussiness Pvt. Ltd.(Task 1) 
       </Typography>
 
       <UserSelector
