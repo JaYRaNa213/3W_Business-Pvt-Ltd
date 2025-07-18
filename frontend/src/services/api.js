@@ -1,25 +1,20 @@
+// src/services/api.js
 import axios from 'axios';
 
-// const API = axios.create({
-//   baseURL: import.meta.env.VITE_API_BASE_URL,
-// });
+const API = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL + '/api/users',
+});
 
-const API = axios.create({ baseURL: 'http://localhost:5000/api/users' });
+export const getAllUsers = () => API.get('/');
 
-
-// Get all users
-export const getUsers = () => API.get('/');
-
-// Get leaderboard
 export const getLeaderboard = () => API.get('/leaderboard');
 
-// Claim points for a user
 export const claimPoints = (userId) => API.post(`/${userId}/claim`);
 
-// Get claim history
-export const getHistory = () => API.get('/history');
+export const getUserHistory = (userId) =>
+  API.get(`/history`, { params: { userId } });
 
-// Create new user
+
 export const createUser = (name) => API.post('/', { name });
 
 export default API;

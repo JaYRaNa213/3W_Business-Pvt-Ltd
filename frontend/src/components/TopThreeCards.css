@@ -1,0 +1,18 @@
+.confetti-wrapper {
+  position: relative;
+}
+
+.sparkle {
+  animation: sparkle-blink 1s infinite ease-in-out alternate;
+}
+
+@keyframes sparkle-blink {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(20deg) scale(1.4);
+    opacity: 0.5;
+  }
+}

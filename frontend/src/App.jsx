@@ -8,16 +8,12 @@ import ClaimHistory from "./components/ClaimHistory";
 
 function App() {
   const [leaderboard, setLeaderboard] = useState([]);
-  const [currentUserId, setCurrentUserId] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState(null); // use only this
 
   const fetchLeaderboard = async () => {
-    try {
-      const res = await getLeaderboard();
-      const sorted = res.data.sort((a, b) => b.totalPoints - a.totalPoints);
-      setLeaderboard(sorted);
-    } catch (error) {
-      console.error("Error loading leaderboard:", error);
-    }
+    const res = await getLeaderboard();
+    const sorted = res.data.sort((a, b) => b.totalPoints - a.totalPoints);
+    setLeaderboard(sorted);
   };
 
   useEffect(() => {
@@ -25,12 +21,9 @@ function App() {
   }, []);
 
   const handleClaim = async (userId) => {
-    try {
-      await claimPoints(userId);
-      fetchLeaderboard(); // Refresh after claiming
-    } catch (err) {
-      console.error("Claim failed", err);
-    }
+    const res = await claimPoints(userId);
+    await fetchLeaderboard();
+    return res;
   };
 
   return (
@@ -40,19 +33,17 @@ function App() {
       </Typography>
 
       <UserSelector
-        users={leaderboard}
-        selectedUserId={currentUserId}
-        onSelect={setCurrentUserId}
-        onClaim={handleClaim}
+        selectedUserId={selectedUserId}
+        setSelectedUserId={setSelectedUserId}
       />
 
       <Leaderboard
         data={leaderboard}
-        currentUserId={currentUserId}
+        currentUserId={selectedUserId} // use selectedUserId here
         onClaim={handleClaim}
       />
 
-      <ClaimHistory />
+      <ClaimHistory userId={selectedUserId} />
     </Container>
   );
 }

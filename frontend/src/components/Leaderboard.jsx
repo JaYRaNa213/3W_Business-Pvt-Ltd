@@ -13,7 +13,7 @@ const Leaderboard = ({ data, currentUserId, onClaim }) => {
 
      {/* Claim Button shown only if a user is selected */}
       {currentUserId && (
-        <Box display="flex" justifyContent="center" my={4}>
+        <Box display="flex " justifyContent="center" my={4}>
           <ClaimButton userId={currentUserId} onClaim={onClaim} />
         </Box>
       )}

@@ -1,86 +1,86 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Avatar,
-  Box,
-  Button,
-} from "@mui/material";
-import { motion } from "framer-motion";
-import { EmojiEvents } from "@mui/icons-material";
+import { Card, CardContent, Typography, Box } from "@mui/material";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import StarIcon from "@mui/icons-material/Star";
+import "./TopThreeCards.css"; // for confetti
 
-const rankColors = ["#FFD700", "#C0C0C0", "#CD7F32"]; // gold, silver, bronze
+const TopThreeCards = ({ users, currentUserId }) => {
+  const positions = [
+    { rank: "🥈", offsetY: 20, color: "#c0c0c0" }, // Silver
+    { rank: "🥇", offsetY: 40, color: "#ffd700" }, // Gold
+    { rank: "🥉", offsetY: 20, color: "#cd7f32" }, // Bronze
+  ];
 
-const TopThreeCards = ({ users, currentUserId, onClaim }) => {
   return (
-    <Box display="flex" justifyContent="center" gap={3} flexWrap="wrap" mt={2}>
+    <Box display="flex" justifyContent="center" alignItems="flex-end" gap={3} mb={4}>
       {users.map((user, index) => {
-        const isCurrent = user._id === currentUserId;
+        const isSelected = user._id === currentUserId;
+        const isTop1 = index === 1;
 
         return (
-          <motion.div
-            key={user._id || index}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: index * 0.2 }}
+          <Box
+            key={user._id}
+            className={isTop1 ? "confetti-wrapper" : ""}
+            sx={{
+              transform: `translateY(-${positions[index].offsetY}px)`,
+              textAlign: "center",
+              transition: "transform 0.3s ease-in-out",
+              "&:hover": {
+                transform: `translateY(-${positions[index].offsetY + 10}px)`,
+              },
+            }}
           >
             <Card
               sx={{
-                width: 200,
-                background: rankColors[index],
-                color: "black",
-                textAlign: "center",
+                minWidth: 180,
                 borderRadius: 4,
-                boxShadow: 6,
+                transition: "0.3s",
+                boxShadow: isTop1 ? 8 : 4,
+                background: isTop1
+                  ? "linear-gradient(135deg, #ffeb3b, #fff176)"
+                  : isSelected
+                  ? "#e3f2fd"
+                  : "#f9f9f9",
+                border: isSelected ? "2px solid #1976d2" : "none",
                 position: "relative",
-                border: isCurrent ? "3px solid #1976d2" : "none",
+                "&:hover": {
+                  boxShadow: 10,
+                  transform: "scale(1.05)",
+                },
               }}
             >
               <CardContent>
-                {index === 0 && (
-                  <EmojiEvents
-                    fontSize="large"
+                <EmojiEventsIcon
+                  sx={{
+                    position: "absolute",
+                    top: -20,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    fontSize: 36,
+                    color: positions[index].color,
+                  }}
+                />
+                {isTop1 && (
+                  <StarIcon
+                    className="sparkle"
                     sx={{
-                      color: "#FFD700",
                       position: "absolute",
-                      top: -20,
-                      left: "50%",
-                      transform: "translateX(-50%)",
+                      top: -10,
+                      right: -10,
+                      color: "#ff4081",
+                      fontSize: 30,
                     }}
                   />
                 )}
-                <Avatar
-                  sx={{
-                    width: 64,
-                    height: 64,
-                    margin: "20px auto 10px",
-                    fontSize: 24,
-                    bgcolor: "#fff",
-                    color: "#000",
-                  }}
-                >
-                  {user?.name?.[0] || "?"}
-                </Avatar>
-                <Typography variant="h6">{user?.name || "Unknown"}</Typography>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  {(user?.totalPoints ?? 0).toLocaleString()} pts
+                <Typography variant="h6" mt={isTop1 ? 3 : 1}>
+                  {positions[index].rank} {user.name}
                 </Typography>
-                <Typography variant="body2">#{index + 1} Rank</Typography>
-
-                {isCurrent && (
-                  <Button
-                    onClick={() => onClaim(user._id)}
-                    variant="contained"
-                    size="small"
-                    sx={{ mt: 1 }}
-                  >
-                    Claim
-                  </Button>
-                )}
+                <Typography variant="subtitle1" fontWeight="bold">
+                  {user.totalPoints} pts
+                </Typography>
               </CardContent>
             </Card>
-          </motion.div>
+          </Box>
         );
       })}
     </Box>
