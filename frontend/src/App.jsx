@@ -1,14 +1,39 @@
+// src/App.jsx
 import { useEffect, useState } from "react";
 import { getLeaderboard, claimPoints } from "./services/api";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+
 import UserSelector from "./components/UserSelector";
 import Leaderboard from "./components/Leaderboard";
-import ClaimHistory from "./components/ClaimHistory";
+import ClaimHistoryPage from "./pages/ClaimHistoryPage";
+
+function HomePage({ leaderboard, selectedUserId, setSelectedUserId, handleClaim }) {
+  return (
+    <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Typography variant="h4" align="center" gutterBottom>
+        🏆 Leaderboard System
+      </Typography>
+
+      <UserSelector
+        selectedUserId={selectedUserId}
+        setSelectedUserId={setSelectedUserId}
+      />
+
+      <Leaderboard
+        data={leaderboard}
+        currentUserId={selectedUserId}
+        onClaim={handleClaim}
+      />
+    </Container>
+  );
+}
 
 function App() {
   const [leaderboard, setLeaderboard] = useState([]);
-  const [selectedUserId, setSelectedUserId] = useState(null); // use only this
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   const fetchLeaderboard = async () => {
     const res = await getLeaderboard();
@@ -27,24 +52,22 @@ function App() {
   };
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4 }}>
-      <Typography variant="h4" align="center" gutterBottom>
-        🏆 Leaderboard System
-      </Typography>
-
-      <UserSelector
-        selectedUserId={selectedUserId}
-        setSelectedUserId={setSelectedUserId}
-      />
-
-      <Leaderboard
-        data={leaderboard}
-        currentUserId={selectedUserId} // use selectedUserId here
-        onClaim={handleClaim}
-      />
-
-      <ClaimHistory userId={selectedUserId} />
-    </Container>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <HomePage
+              leaderboard={leaderboard}
+              selectedUserId={selectedUserId}
+              setSelectedUserId={setSelectedUserId}
+              handleClaim={handleClaim}
+            />
+          }
+        />
+        <Route path="/history/:userId" element={<ClaimHistoryPage />} />
+      </Routes>
+    </Router>
   );
 }
 

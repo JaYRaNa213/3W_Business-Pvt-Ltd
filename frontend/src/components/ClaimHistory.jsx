@@ -1,78 +1,50 @@
+// src/components/ClaimHistory.jsx
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  CircularProgress,
-} from "@mui/material";
-import { getHistory } from "../services/api";
-import dayjs from "dayjs";
+import { Box, Typography, List, ListItem, ListItemText, Divider } from "@mui/material";
+import { getUserHistory } from "../services/api";
 
-const ClaimHistory = () => {
+const ClaimHistory = ({ userId }) => {
   const [history, setHistory] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchHistory = async () => {
-      try {
-        const res = await getHistory();
-        setHistory(res.data);
-      } catch (error) {
-        console.error("Failed to fetch history", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (userId) {
+      fetchHistory();
+    }
+  }, [userId]);
 
-    fetchHistory();
-  }, []);
+  const fetchHistory = async () => {
+    try {
+      const res = await getUserHistory(userId);
+      setHistory(res.data || []);
+    } catch (error) {
+      console.error("Error fetching claim history:", error);
+    }
+  };
 
   return (
-    <Box mt={5}>
+    <Box mt={4}>
       <Typography variant="h6" gutterBottom>
-        🕓 Claim History
+        Claim History
       </Typography>
-      <Paper elevation={3}>
-        {loading ? (
-          <Box p={3} textAlign="center">
-            <CircularProgress />
-          </Box>
-        ) : (
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>User</TableCell>
-                <TableCell>Points Claimed</TableCell>
-                <TableCell>Date & Time</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {history.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={3} align="center">
-                    No claims yet
-                  </TableCell>
-                </TableRow>
-              ) : (
-                history.map((entry, idx) => (
-                  <TableRow key={idx}>
-                    <TableCell>{entry.user?.name || "Unknown"}</TableCell>
-                    <TableCell>{entry.points}</TableCell>
-                    <TableCell>
-                      {dayjs(entry.createdAt).format("MMM D, YYYY h:mm A")}
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        )}
-      </Paper>
+      {history.length === 0 ? (
+        <Typography variant="body2" color="text.secondary">
+          No claims yet.
+        </Typography>
+      ) : (
+        <List>
+          {history.map((entry, idx) => (
+            <React.Fragment key={idx}>
+              <ListItem>
+                <ListItemText
+                  primary={`+${entry.points} pts`}
+                  secondary={new Date(entry.createdAt).toLocaleString()}
+                />
+              </ListItem>
+              {idx !== history.length - 1 && <Divider />}
+            </React.Fragment>
+          ))}
+        </List>
+      )}
     </Box>
   );
 };
