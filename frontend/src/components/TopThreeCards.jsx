@@ -76,7 +76,7 @@ const TopThreeCards = ({ users, currentUserId }) => {
                   {positions[index].rank} {user.name}
                 </Typography>
                 <Typography variant="subtitle1" fontWeight="bold">
-                  {user.totalPoints} pts
+                  {user.totalPoints} Pts
                 </Typography>
               </CardContent>
             </Card>

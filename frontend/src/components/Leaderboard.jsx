@@ -8,30 +8,37 @@ import { useNavigate } from "react-router-dom";
 const Leaderboard = ({ data, currentUserId, onClaim }) => {
   const navigate = useNavigate();
 
-  const topThree = data.slice(0, 3);
-  const remaining = data.slice(3);
+  const sortedData = [...data].sort((a, b) => b.totalPoints - a.totalPoints);
+
+  const topThree = [sortedData[1], sortedData[0], sortedData[2]]; 
+
+  const remaining = sortedData.slice(3);
+
+  
 
   return (
     <>
-      {/* Claim Button shown only if a user is selected */}
+    
       {currentUserId && (
-        <Box display="flex" justifyContent="center" my={2}>
-          <ClaimButton userId={currentUserId} onClaim={onClaim} />
-        </Box>
+        <Box display="flex" justifyContent="center" my={2} mb={8}>
+  <ClaimButton userId={currentUserId} onClaim={onClaim} />
+</Box>
+
       )}
 
-      {/* Top 3 Leaderboard Cards */}
+      
       <TopThreeCards users={topThree} currentUserId={currentUserId} />
 
-      {/* Remaining Leaderboard List */}
+      
       <RemainingList users={remaining} currentUserId={currentUserId} />
 
-      {/* Claim History Button */}
+      
       {currentUserId && (
-        <Box display="flex" justifyContent="center" mt={4}>
+        <Box display="flex" justifyContent="center" mt={8} mb={6}>
           <Button
             size="medium"
             variant="outlined"
+            
             onClick={() => navigate(`/history/${currentUserId}`)}
           >
             View Claim History

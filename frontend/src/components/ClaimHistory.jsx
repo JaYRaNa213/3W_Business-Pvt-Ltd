@@ -1,4 +1,3 @@
-// src/components/ClaimHistory.jsx
 import React, { useEffect, useState } from "react";
 import { Box, Typography, List, ListItem, ListItemText, Divider } from "@mui/material";
 import { getUserHistory } from "../services/api";
@@ -23,9 +22,6 @@ const ClaimHistory = ({ userId }) => {
 
   return (
     <Box mt={4}>
-      <Typography variant="h6" gutterBottom>
-        Claim History
-      </Typography>
       {history.length === 0 ? (
         <Typography variant="body2" color="text.secondary">
           No claims yet.
@@ -34,10 +30,18 @@ const ClaimHistory = ({ userId }) => {
         <List>
           {history.map((entry, idx) => (
             <React.Fragment key={idx}>
-              <ListItem>
+              <ListItem
+                secondaryAction={
+                  <Typography variant="body2" color="text.secondary">
+                    {entry.claimedAt
+    ? new Date(entry.claimedAt).toLocaleString()
+    : "Unknown Date"}
+                  </Typography>
+                }
+              >
                 <ListItemText
                   primary={`+${entry.points} pts`}
-                  secondary={new Date(entry.createdAt).toLocaleString()}
+                  primaryTypographyProps={{ fontWeight: "bold" }}
                 />
               </ListItem>
               {idx !== history.length - 1 && <Divider />}
