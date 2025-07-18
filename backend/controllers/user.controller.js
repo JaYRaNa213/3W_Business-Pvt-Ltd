@@ -11,17 +11,21 @@ export const getUsers = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-  try {
-    const { name } = req.body;
-    if (!name?.trim()) return res.status(400).json({ message: "Name is required" });
+  const { name } = req.body;
 
-    const newUser = new RatingUser({ name: name.trim() });
+  try {
+    const newUser = new RatingUser({ name });
     await newUser.save();
     res.status(201).json(newUser);
   } catch (err) {
-    res.status(500).json({ message: "Error creating user" });
+    if (err.code === 11000) {
+      // Duplicate key error
+      return res.status(400).json({ message: "User with this name already exists" });
+    }
+    res.status(500).json({ message: "Server Error" });
   }
 };
+
 
 export const claimPoints = async (req, res) => {
   try {
