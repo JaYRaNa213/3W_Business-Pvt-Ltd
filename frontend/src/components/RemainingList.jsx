@@ -21,7 +21,16 @@ const RemainingList = ({ users = [], currentUserId = "", onClaim }) => {
 
   return (
     <Box mt={2}>
-      <Paper elevation={3} sx={{ borderRadius: 2 }}>
+      <Paper
+  elevation={3}
+  sx={{
+    borderRadius: 2,
+    width: "120%",
+    transform: "translateX(-8%)", // center the overflowed width
+    margin: "0 auto",
+  }}
+>
+
         <Box px={2} py={1} borderBottom="1px solid #ddd">
           <Typography variant="h6" fontWeight="bold">
             🏅 Rankings 4  to 10

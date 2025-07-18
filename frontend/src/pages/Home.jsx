@@ -50,8 +50,17 @@ const Home = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #6f7111ff, #f0fbbbff)",
-        py: 4,
+        background: "",
+        py: 2,
+        px: 0,
+        overflow: "hidden",
+        position: "relative",
+        backgroundColor: "#f5f5f5",        
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center"
+        
       }}
     >
       <Container maxWidth="md">
