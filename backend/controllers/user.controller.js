@@ -61,9 +61,9 @@ export const getLeaderboard = async (req, res) => {
 
 export const getClaimHistory = async (req, res) => {
   try {
-    const history = await ClaimHistory.find()
-      .populate("userId", "name")
-      .sort({ claimedAt: -1 });
+    const { userId } = req.params;
+const history = await ClaimHistory.find({ userId });
+
     res.json(history);
   } catch (err) {
     res.status(500).json({ message: "Error fetching claim history" });

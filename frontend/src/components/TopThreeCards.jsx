@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import StarIcon from "@mui/icons-material/Star";
-import "./TopThreeCards.css"; // for confetti
+import "./TopThreeCards.css"; // for confetti animation
 
 const TopThreeCards = ({ users, currentUserId }) => {
   const positions = [
@@ -14,15 +14,18 @@ const TopThreeCards = ({ users, currentUserId }) => {
   return (
     <Box display="flex" justifyContent="center" alignItems="flex-end" gap={3} mb={4}>
       {users.map((user, index) => {
+        if (!user) return null;
+
         const isSelected = user._id === currentUserId;
         const isTop1 = index === 1;
 
         return (
           <Box
-            key={user._id}
+            key={user._id || index}
             className={isTop1 ? "confetti-wrapper" : ""}
             sx={{
-              transform: `translateY(-${positions[index].offsetY}px)`,
+                            transform: `translateY(-${positions[index]?.offsetY ?? 0}px)`,
+
               textAlign: "center",
               transition: "transform 0.3s ease-in-out",
               "&:hover": {
@@ -57,7 +60,8 @@ const TopThreeCards = ({ users, currentUserId }) => {
                     left: "50%",
                     transform: "translateX(-50%)",
                     fontSize: 36,
-                    color: positions[index].color,
+                    color: positions[index]?.color ?? "#ccc",
+
                   }}
                 />
                 {isTop1 && (

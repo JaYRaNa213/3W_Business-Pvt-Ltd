@@ -6,19 +6,18 @@ const ClaimHistory = ({ userId }) => {
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    if (userId) {
-      fetchHistory();
-    }
-  }, [userId]);
+    const fetchHistory = async () => {
+      try {
+        const res = await getUserHistory(userId);
+        setHistory(res.data || []);
+      } catch (error) {
+        console.error("Error fetching claim history:", error);
+        setHistory([]);
+      }
+    };
 
-  const fetchHistory = async () => {
-    try {
-      const res = await getUserHistory(userId);
-      setHistory(res.data || []);
-    } catch (error) {
-      console.error("Error fetching claim history:", error);
-    }
-  };
+    if (userId) fetchHistory();
+  }, [userId]);
 
   return (
     <Box mt={4}>
@@ -29,13 +28,13 @@ const ClaimHistory = ({ userId }) => {
       ) : (
         <List>
           {history.map((entry, idx) => (
-            <React.Fragment key={idx}>
+            <React.Fragment key={entry._id || idx}>
               <ListItem
                 secondaryAction={
                   <Typography variant="body2" color="text.secondary">
                     {entry.claimedAt
-    ? new Date(entry.claimedAt).toLocaleString()
-    : "Unknown Date"}
+                      ? new Date(entry.claimedAt).toLocaleString()
+                      : "Unknown Date"}
                   </Typography>
                 }
               >

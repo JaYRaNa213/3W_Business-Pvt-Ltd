@@ -14,7 +14,8 @@ function HomePage({ leaderboard, selectedUserId, setSelectedUserId, handleClaim 
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <Typography variant="h4" align="center" gutterBottom>
-        🏆 Leaderboard System
+                🏆 Leaderboard System
+               3 W Pvt. Ltd. Task 1 
       </Typography>
 
       <UserSelector

@@ -11,9 +11,10 @@ export const getLeaderboard = () => API.get('/leaderboard');
 
 export const claimPoints = (userId) => API.post(`/${userId}/claim`);
 
-export const getUserHistory = (userId) =>
-  API.get(`/history`, { params: { userId } });
+// export const getUserHistory = (userId) =>
+//   API.get(`/history`, { params: { userId } });
 
+export const getUserHistory = (userId) => API.get(`/history/${userId}`);
 
 export const createUser = (name) => API.post('/', { name });
 
