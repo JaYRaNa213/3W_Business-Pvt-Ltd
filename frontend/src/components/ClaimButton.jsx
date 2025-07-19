@@ -5,6 +5,7 @@ import {
   Snackbar,
   Alert,
   Stack,
+  Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -13,12 +14,21 @@ const ClaimButton = ({ userId, onClaim }) => {
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
-    severity: "success",
+    severity: "info",
   });
 
   const navigate = useNavigate();
 
   const handleClaim = async () => {
+    if (!userId) {
+      setSnackbar({
+        open: true,
+        message: "⚠️ Please select a user to claim points.",
+        severity: "warning",
+      });
+      return;
+    }
+
     try {
       setLoading(true);
       const claimedPoints = await onClaim();
@@ -39,34 +49,51 @@ const ClaimButton = ({ userId, onClaim }) => {
   };
 
   const handleViewHistory = () => {
+    if (!userId) {
+      setSnackbar({
+        open: true,
+        message: "⚠️ Please select a user to view history.",
+        severity: "warning",
+      });
+      return;
+    }
+
     navigate(`/history/${userId}`);
   };
 
   return (
     <>
-      <Stack direction="row" spacing={2}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          disabled={!userId}
-          onClick={handleViewHistory}
-        >
-          📜 View History
-        </Button>
+      <Box display="flex" justifyContent="flex-end" mt={2}>
+        <Stack direction="row" spacing={2}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleViewHistory}
+            sx={{
+              opacity: userId ? 1 : 0.5,
+              pointerEvents: loading ? "none" : "auto",
+            }}
+          >
+            📜 View History
+          </Button>
 
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={loading || !userId}
-          onClick={handleClaim}
-        >
-          {loading ? (
-            <CircularProgress size={24} color="inherit" />
-          ) : (
-            "🎯 Claim Points"
-          )}
-        </Button>
-      </Stack>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleClaim}
+            sx={{
+              opacity: userId ? 1 : 0.5,
+              pointerEvents: loading ? "none" : "auto",
+            }}
+          >
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "🎯 Claim Points"
+            )}
+          </Button>
+        </Stack>
+      </Box>
 
       <Snackbar
         open={snackbar.open}

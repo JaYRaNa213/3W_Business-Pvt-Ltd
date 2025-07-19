@@ -127,21 +127,7 @@ const UserSelector = ({
         </Button>
 
         <Box display="flex" gap={2}>
-          {/* <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => handleActionClick("view history")}
-          >
-            📜 View History
-          </Button> */}
-
-          {/* <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleActionClick("claim points")}
-          >
-            🎯 Claim Points
-          </Button> */}
+          
         </Box>
       </Box>
 
