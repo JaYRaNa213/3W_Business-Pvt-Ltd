@@ -23,7 +23,7 @@ const ClaimButton = ({ userId, onClaim }) => {
     if (!userId) {
       setSnackbar({
         open: true,
-        message: "⚠️ Please select a user to claim points.",
+        message: " Please select a user to claim points.",
         severity: "warning",
       });
       return;
@@ -34,13 +34,13 @@ const ClaimButton = ({ userId, onClaim }) => {
       const claimedPoints = await onClaim();
       setSnackbar({
         open: true,
-        message: `✅ Claimed ${claimedPoints} points successfully!`,
+        message: ` Claimed ${claimedPoints} points successfully!`,
         severity: "success",
       });
     } catch (err) {
       setSnackbar({
         open: true,
-        message: "❌ Failed to claim points!",
+        message: " Failed to claim points!",
         severity: "error",
       });
     } finally {
@@ -52,7 +52,7 @@ const ClaimButton = ({ userId, onClaim }) => {
     if (!userId) {
       setSnackbar({
         open: true,
-        message: "⚠️ Please select a user to view history.",
+        message: " Please select a user to view history.",
         severity: "warning",
       });
       return;
