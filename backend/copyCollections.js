@@ -25,15 +25,15 @@ const copyCollection = async (collectionName) => {
     const data = await SourceModel.find({});
     if (data.length > 0) {
       await TargetModel.insertMany(data);
-      console.log(`✅ Copied ${data.length} documents to '${collectionName}'`);
+      console.log(`Copied ${data.length} documents to '${collectionName}'`);
     } else {
-      console.log(`⚠️ No documents found in '${collectionName}'`);
+      console.log(` No documents found in '${collectionName}'`);
     }
 
     await sourceConn.close();
     await targetConn.close();
   } catch (err) {
-    console.error(`❌ Error copying '${collectionName}':`, err);
+    console.error(` Error copying '${collectionName}':`, err);
   }
 };
 

@@ -5,6 +5,7 @@ const claimHistorySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "RatingUser",
   },
+  
   points: Number,
   claimedAt: {
     type: Date,

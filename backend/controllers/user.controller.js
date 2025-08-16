@@ -1,21 +1,23 @@
 import RatingUser from "../models/user.model.js";
 import ClaimHistory from "../models/claimHistory.model.js";
 
-// In-memory lock to prevent rapid duplicate claims
+
+
+// In-memory lock to prevent  duplicate claims
 const claimLock = new Map();
 
-// ✅ Get all users sorted by points (for leaderboard or user list)
+//  Get all users  (for leaderboard or user list)
 export const getUsers = async (req, res) => {
   try {
     const users = await RatingUser.find().sort({ totalPoints: -1 });
     res.json(users);
   } catch (err) {
-    console.error("❌ Error fetching users:", err.message);
+    console.error(" Error fetching users:", err.message);
     res.status(500).json({ message: "Error fetching users" });
   }
 };
 
-// ✅ Create a new user (check for duplicates)
+
 export const createUser = async (req, res) => {
   const { name } = req.body;
 
@@ -27,12 +29,15 @@ export const createUser = async (req, res) => {
     if (err.code === 11000) {
       return res.status(400).json({ message: "User with this name already exists" });
     }
-    console.error("❌ Error creating user:", err.message);
+    console.error(" Error creating user:", err.message);
     res.status(500).json({ message: "Server Error" });
   }
 };
 
-// ✅ Claim random points (with lock to prevent spam clicks)
+
+
+
+//  Claim random points (with lock to prevent spam clicks)
 export const claimPoints = async (req, res) => {
   const { id: userId } = req.params;
 
@@ -41,11 +46,13 @@ export const claimPoints = async (req, res) => {
     return res.status(429).json({ message: "Please wait before claiming again" });
   }
 
+
+
   // Lock this user
   claimLock.set(userId, true);
 
   try {
-    console.log("🔁 Claim endpoint triggered for", userId);
+    console.log(" Claim endpoint triggered for", userId);
 
     const user = await RatingUser.findById(userId);
     if (!user) {
@@ -59,18 +66,23 @@ export const claimPoints = async (req, res) => {
 
     await ClaimHistory.create({ userId: user._id, points });
 
-    console.log(`✅ [CLAIMED] ${user.name} claimed ${points} points — Total now: ${user.totalPoints}`);
+    console.log(` [CLAIMED] ${user.name} claimed ${points} points — Total now: ${user.totalPoints}`);
     res.json({ message: "Points claimed", points });
   } catch (err) {
-    console.error("❌ Error claiming points:", err.message);
+    console.error(" Error claiming points:", err.message);
     res.status(500).json({ message: "Error claiming points" });
   } finally {
     // Unlock after 1 second delay
     setTimeout(() => claimLock.delete(userId), 1000);
   }
+
 };
 
-// ✅ Get full leaderboard
+
+
+
+
+//  Get full leaderboard of user , this is 
 export const getLeaderboard = async (req, res) => {
   try {
     const users = await RatingUser.find().sort({ totalPoints: -1 });
@@ -81,12 +93,15 @@ export const getLeaderboard = async (req, res) => {
     }));
     res.json(leaderboard);
   } catch (err) {
-    console.error("❌ Error fetching leaderboard:", err.message);
+    console.error(" Error fetching leaderboard:", err.message);
     res.status(500).json({ message: "Error fetching leaderboard" });
   }
 };
 
-// ✅ Get claim history for a user
+
+
+
+
 export const getClaimHistory = async (req, res) => {
   try {
     const { userId } = req.params;
