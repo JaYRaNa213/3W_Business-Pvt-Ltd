@@ -4,8 +4,9 @@ import {
   CardContent,
   Typography,
   Box,
-  Stack,
+  
   useTheme,
+  Avatar
 } from "@mui/material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import StarIcon from "@mui/icons-material/Star";
@@ -85,6 +86,12 @@ const TopThreeCards = ({ users, currentUserId }) => {
                     zIndex: 2,
                   }}
                 />
+
+
+                
+
+
+
                 {isTop1 && (
                   <StarIcon
                     className="sparkle"
@@ -98,6 +105,23 @@ const TopThreeCards = ({ users, currentUserId }) => {
                     }}
                   />
                 )}
+
+
+
+                <Avatar
+  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuazTmU3s4JXdP67FTpWxWxdwI9ma98Mbtww&s"                           // 👉 dummy profile image service
+  alt={user.name}
+  sx={{
+    width: 60,
+    height: 60,
+    position: "absolute",
+    top: -10,
+    left: "50%",
+    transform: "translateX(-50%)",
+    border: "2px solid white",
+  }}
+/>
+
                 <Typography
                   variant="subtitle1"
                   mt={3}
