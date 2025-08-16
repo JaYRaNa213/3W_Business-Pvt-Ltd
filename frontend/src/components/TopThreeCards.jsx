@@ -109,7 +109,7 @@ const TopThreeCards = ({ users, currentUserId }) => {
 
 
                 <Avatar
-  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuazTmU3s4JXdP67FTpWxWxdwI9ma98Mbtww&s"                           // 👉 dummy profile image service
+  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiMHCDMtqM_45FAek0yHA1bNk79rzvO1C1Pg&s"                           
   alt={user.name}
   sx={{
     width: 60,
