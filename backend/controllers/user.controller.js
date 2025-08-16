@@ -60,19 +60,25 @@ export const claimPoints = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+
+
     const points = Math.floor(Math.random() * 10) + 1;
     user.totalPoints += points;
     await user.save();
 
+
+
     await ClaimHistory.create({ userId: user._id, points });
 
     console.log(` [CLAIMED] ${user.name} claimed ${points} points — Total now: ${user.totalPoints}`);
+
     res.json({ message: "Points claimed", points });
   } catch (err) {
     console.error(" Error claiming points:", err.message);
     res.status(500).json({ message: "Error claiming points" });
   } finally {
-    // Unlock after 1 second delay
+
+    
     setTimeout(() => claimLock.delete(userId), 1000);
   }
 
@@ -108,7 +114,7 @@ export const getClaimHistory = async (req, res) => {
     const history = await ClaimHistory.find({ userId });
     res.json(history);
   } catch (err) {
-    console.error("❌ Error fetching claim history:", err.message);
+    console.error(" Error fetching claim history:", err.message);
     res.status(500).json({ message: "Error fetching claim history" });
   }
 };
